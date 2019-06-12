@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'gatsby'
+import {Link} from 'gatsby'
 import kebabCase from 'lodash/kebabCase'
 
 import Subline from './Subline'
@@ -45,7 +45,7 @@ const Excerpt = styled.p`
   margin-bottom: 1rem;
 `
 
-const Article = ({ title, date, excerpt, slug, timeToRead, categories }) => {
+const Article = ({title, date, excerpt, slug, timeToRead, categories}) => {
   const firstChar = title.charAt(0)
 
   return (

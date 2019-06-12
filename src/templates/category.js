@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { Link, graphql } from 'gatsby'
+import {Link, graphql} from 'gatsby'
 import styled from 'styled-components'
 
-import { Layout, Wrapper, Header, Subline, Article, SectionTitle } from '../components'
+import {Layout, Wrapper, Header, Subline, Article, SectionTitle} from '../components'
 import config from '../../config'
 
 const Content = styled.div`
@@ -23,8 +23,8 @@ const Content = styled.div`
   }
 `
 
-const Category = ({ pageContext: { category }, data: { allMdx } }) => {
-  const { nodes, totalCount } = allMdx
+const Category = ({pageContext: {category}, data: {allMdx}}) => {
+  const {nodes, totalCount} = allMdx
   const subline = `${totalCount} post${totalCount === 1 ? '' : 's'} tagged with "${category}"`
 
   return (
@@ -73,8 +73,8 @@ Category.propTypes = {
 export const postQuery = graphql`
   query CategoryPage($category: String!) {
     allMdx(
-      sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { categories: { eq: $category } } }
+      sort: {fields: [frontmatter___date], order: DESC}
+      filter: {frontmatter: {categories: {eq: $category}}}
     ) {
       totalCount
       nodes {

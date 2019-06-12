@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { Link, graphql } from 'gatsby'
+import {Link, graphql} from 'gatsby'
 import styled from 'styled-components'
 import kebabCase from 'lodash/kebabCase'
 
-import { Layout, Wrapper, Header, SectionTitle } from '../components'
+import {Layout, Wrapper, Header, SectionTitle} from '../components'
 import config from '../../config'
 
 const Content = styled.div`
@@ -32,7 +32,7 @@ const Title = styled.h3`
 
 const Category = ({
   data: {
-    allMdx: { group },
+    allMdx: {group},
   },
 }) => (
   <Layout>
@@ -45,8 +45,8 @@ const Category = ({
         <SectionTitle>Categories</SectionTitle>
         {group.map(category => (
           <Title key={category.fieldValue}>
-            <Link to={`/categories/${kebabCase(category.fieldValue)}`}>{category.fieldValue}</Link> (
-            {category.totalCount})
+            <Link to={`/categories/${kebabCase(category.fieldValue)}`}>{category.fieldValue}</Link>{' '}
+            ({category.totalCount})
           </Title>
         ))}
       </Content>

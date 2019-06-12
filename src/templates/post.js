@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, graphql } from 'gatsby'
+import {Link, graphql} from 'gatsby'
 import styled from 'styled-components'
 import kebabCase from 'lodash/kebabCase'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 
-import { Layout, Wrapper, Header, Subline, SEO, PrevNext } from '../components'
+import {Layout, Wrapper, Header, Subline, SEO, PrevNext} from '../components'
 import config from '../../config'
 
 const Content = styled.article`
@@ -50,7 +50,7 @@ const PostContent = styled.div`
   margin-top: 4rem;
 `
 
-const Post = ({ pageContext: { slug, prev, next }, data: { mdx: postNode } }) => {
+const Post = ({pageContext: {slug, prev, next}, data: {mdx: postNode}}) => {
   const post = postNode.frontmatter
 
   return (
@@ -103,7 +103,7 @@ Post.defaultProps = {
 
 export const postQuery = graphql`
   query postBySlug($slug: String!) {
-    mdx(fields: { slug: { eq: $slug } }) {
+    mdx(fields: {slug: {eq: $slug}}) {
       code {
         body
       }

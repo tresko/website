@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'gatsby'
+import {Link} from 'gatsby'
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const Next = styled.div`
   }
 `
 
-const PrevNext = ({ next, prev }) => (
+const PrevNext = ({next, prev}) => (
   <Wrapper>
     {prev && (
       <Prev>
