@@ -5,7 +5,7 @@ import Helmet from 'react-helmet'
 import config from '../../config'
 
 const SEO = props => {
-  const { postNode, postPath, article, buildTime } = props
+  const {postNode, postPath, article, buildTime} = props
 
   let title
   let description

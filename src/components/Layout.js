@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
+import styled, {ThemeProvider, createGlobalStyle} from 'styled-components'
 
 import SEO from './SEO'
 import theme from '../../config/theme'
@@ -194,7 +194,7 @@ const Footer = styled.footer`
   }
 `
 
-const Layout = ({ children, customSEO }) => {
+const Layout = ({children, customSEO}) => {
   const buildTime = useBuildTime()
 
   return (
@@ -204,8 +204,11 @@ const Layout = ({ children, customSEO }) => {
         <GlobalStyle />
         {children}
         <Footer>
-          &copy; 2019 by LekoArts. All rights reserved. <br />
-          <a href="https://github.com/LekoArts/gatsby-starter-minimal-blog">GitHub Repository</a> <br />
+          &copy; 2019 by Tresko. All rights reserved. <br />
+          <a href="https://github.com/tresko">
+            GitHub Repository
+          </a>{' '}
+          <br />
           <span>Last build: {buildTime}</span>
         </Footer>
       </>

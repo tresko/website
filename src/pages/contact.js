@@ -1,10 +1,9 @@
 /* eslint jsx-a11y/label-has-for:0 */
-
 import React from 'react'
 import Helmet from 'react-helmet'
-import { Link } from 'gatsby'
+import {Link} from 'gatsby'
 import styled from 'styled-components'
-import { Layout, Wrapper, Header, Button } from '../components'
+import {Layout, Wrapper, Header, Button} from '../components'
 
 import config from '../../config'
 
@@ -52,7 +51,13 @@ const Contact = () => (
       <Content>
         <h1>Contact</h1>
         <p>Super cool intro text to get people contacting me! It uses Netlify's form feature.</p>
-        <form name="contact-form" method="post" data-netlify="true" data-netlify-honeypot="bot-field" action="/success">
+        <form
+          name="contact-form"
+          method="post"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          action="/success"
+        >
           <p>
             <label htmlFor="contact-name">
               Name
