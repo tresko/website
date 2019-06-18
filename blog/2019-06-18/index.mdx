@@ -1,0 +1,175 @@
+---
+date: "2019-06-18"
+title: "Yet another datepicker in React"
+categories:
+  - Datepicker
+---
+
+![](https://github.com/tresko/react-datepicker/raw/master/docs/datepicker.gif)
+
+<br />
+
+Yet another datepicker in React, ha? But why, if you can use `react-dates`. Of course, it is a great library if you already use the `moment`, which is a widely used library for date and time manipulations. But the problem of the `moment` is its size. That's why I decided to create my own datepicker. 
+
+## Motivation
+ - Accept JavaScript date, instead `moment`,
+ - RTL support,
+ - internationalize,
+ - mobile-friendly,
+ - allow selecting a specific date or range
+ - theming with styled-system
+ - written in TypeScript
+ - etc.
+
+## Architecture
+
+I wanted the datepicker to be used in as many scenarios, so I split the project into two libraries [`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) and [`@datepicker-react/styled`](https://github.com/tresko/react-datepicker).
+
+## @datepicker-react/hooks
+
+[`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) are React hooks (if you are not familiar with React hooks, check out [this article](https://reactjs.org/docs/hooks-intro.html)), which allow building the datepicker or a calendar according to your needs in a few minutes. The library contains three hooks, namely `useDatepicker`, `useMonth` and `useDay`.
+
+### Install
+
+```
+yarn add @datepicker-react/hooks
+```
+
+### useDatepicker
+
+This hook is alpha and omega of the [`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks). It manages the datepicker logic. You can control the selected dates using the `startDate`, `endDate`, and `onDatesChange` props as shown below. 
+
+```js
+const {
+    activeMonths,
+    isDateSelected,
+    isFirstOrLastSelectedDate,
+    isDateHovered,
+    firstDayOfWeek,
+    onDateSelect,
+    onResetDates,
+    goToPreviousMonths,
+    goToNextMonths,
+    numberOfMonths,
+    hoveredDate,
+    onDateHover,
+    isDateFocused,
+    focusedDate,
+    onDateFocus,
+    isDateBlocked,
+} = useDatepicker({
+    startDate: new Date(2019, 1, 1),
+    endDate: new Date(2019, 1, 10),
+    focusedInput: null,
+    onDatesChange: (props) => {
+      console.log(props)
+    },
+})
+```
+
+### useMonth
+
+`useMonth` returns the table of `days`, `weekDayLabels` and `monthLabel`, depends on the `year` and `month` props.
+
+```js
+const {
+    days,
+    weekdayLabels,
+    monthLabel,
+} = useMonth({
+    year: 2019,
+    month: 1,
+})
+```
+
+### useDay
+
+Returns callbacks and flags, which we need for styling.
+
+```js
+const {
+    tabIndex,
+    isSelected,
+    isSelectedStartOrEnd,
+    isWithinHoverRange,
+    disabledDate,
+    onKeyDown,
+    onClickk,
+    onMouseEnter,
+} = useMonth({
+     date,
+    focusedDate,
+    isDateSelected,
+    isDateFocused,
+    isFirstOrLastSelectedDate,
+    isDateHovered,
+    isDateBlocked,
+    onDateSelect,
+    onDateFocus,
+    onDateHover,
+    dayRef,
+})
+```
+
+## @datepicker-react/styled
+
+An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with [styled-components](https://www.styled-components.com/). It supports RTL and theming with [styled-system](https://github.com/styled-system/styled-system).
+
+### Install
+
+```sh
+yarn add @datepicker-react/styled styled-components
+```
+
+### Include components
+
+```js
+import {DateRangeInput, DateSingleInput, Datepicker} from '@datepicker-react/styled'
+```
+
+### DateRangeInput example
+
+The `DateRangeInput` is a fully controlled component that allows users to select a date range. You
+can control the selected dates using the `startDate`, `endDate`, and `onDatesChange` props as shown
+below. Similarly, you can control which input is focused as well as calendar visibility (the
+calendar is only visible if `focusedInput` is defined) with the `focusedInput` and `onFocusChange`
+props as shown below.
+
+Here is the minimum _REQUIRED_ setup you need to get the `DateRangeInput` working:
+
+```jsx
+import React, {useReducer} from 'react'
+import {DateRangeInput} from '@datepicker-react/styled'
+
+const initialState = {
+  startDate: null,
+  endDate: null,
+  focusedInput: null,
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'focusChange':
+      return {...state, focusedInput: action.payload}
+    case 'dateChange':
+      return action.payload
+    default:
+      throw new Error()
+  }
+}
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  return (
+    <DateRangeInput
+      onDatesChange={data => dispatch({type: 'dateChange', payload: data})}
+      onFocusChange={focusedInput => dispatch({type: 'focusChange', payload: focusedInput})}
+      startDate={state.startDate} // Date or null
+      endDate={state.endDate} // Date or null
+      focusedInput={state.focusedInput} // START_DATE, END_DATE or null
+    />
+  )
+}
+```
+

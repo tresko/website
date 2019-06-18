@@ -34,6 +34,18 @@ const Content = styled.article`
     }
   }
 
+  h2 {
+    margin: 3rem 0 1rem;
+  }
+  
+  h3 {
+    margin: 2.2rem 0 1rem;
+  }
+  
+  p {
+    margin: 1rem 0;
+  }
+
   .prism-code {
     padding: 0.75rem;
     border-radius: 5px;

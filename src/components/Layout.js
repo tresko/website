@@ -28,10 +28,10 @@ const GlobalStyle = createGlobalStyle`
       font-size: 3.052rem;
     }
     h2 {
-      font-size: 2.441rem;
+      font-size: 2.141rem;
     }
     h3 {
-      font-size: 1.953rem;
+      font-size: 1.653rem;
     }
     h4 {
       font-size: 1.563rem;
