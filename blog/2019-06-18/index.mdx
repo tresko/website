@@ -2,6 +2,7 @@
 date: "2019-06-18"
 title: "Yet another datepicker in React"
 categories:
+  - React
   - Datepicker
 ---
 
@@ -9,25 +10,40 @@ categories:
 
 <br />
 
-Yet another datepicker in React, ha? But why, if you can use `react-dates`. Of course, it is a great library if you already use the `moment`, which is a widely used library for date and time manipulations. But the problem of the `moment` is its size. That's why I decided to create my own datepicker. 
+Yet another datepicker in React, ha? But why, if you can use `react-dates`. It is a great library if you already use [moment](https://momentjs.com/), which is a widely used library for
+date and time manipulations. However, the modern web is pushing us to keep reducing bundle sizes, and that is a problem yet to be addressed by the creators of `moment`.
+
+Long story short:  I decided to create my own datepicker.
+
+Obviously bundle size was not the sole motivation. I noticed that the most used libraries haven't adopted css-in-js and react hooks or a more functional programing approach.
+
+To sum up:
 
 ## Motivation
- - Accept JavaScript date, instead `moment`,
+ - Support native JavaScript date, instead of the `moment` object,
  - RTL support,
  - internationalize,
  - mobile-friendly,
- - allow selecting a specific date or range
- - theming with styled-system
- - written in TypeScript
+ - selecting a specific date or range
+ - theming with **styled-system**
+ - written in **TypeScript**
+ - React hooks
  - etc.
+
+Check out the [storybook examples](https://react-datepicker.netlify.com) or keep on reading for the technical details.
 
 ## Architecture
 
-I wanted the datepicker to be used in as many scenarios, so I split the project into two libraries [`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) and [`@datepicker-react/styled`](https://github.com/tresko/react-datepicker).
+Still with me? Let's get to business.
+
+I wanted the datepicker to be used in a variety of scenarios, so I split the project into two libraries [`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks)
+and [`@datepicker-react/styled`](https://github.com/tresko/react-datepicker).
 
 ## @datepicker-react/hooks
 
-[`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) are React hooks (if you are not familiar with React hooks, check out [this article](https://reactjs.org/docs/hooks-intro.html)), which allow building the datepicker or a calendar according to your needs in a few minutes. The library contains three hooks, namely `useDatepicker`, `useMonth` and `useDay`.
+[`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) are React hooks (if you are not familiar with React hooks,
+check out [the official documentation](https://reactjs.org/docs/hooks-intro.html)), that make it easy to build a datepicker or calendar component, tailored to your needs in a few minutes.
+The library contains three hooks, namely `useDatepicker`, `useMonth` and `useDay`.
 
 ### Install
 
@@ -37,7 +53,7 @@ yarn add @datepicker-react/hooks
 
 ### useDatepicker
 
-This hook is alpha and omega of the [`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks). It manages the datepicker logic. You can control the selected dates using the `startDate`, `endDate`, and `onDatesChange` props as shown below. 
+This hook the core of [`@datepicker-react/hooks`](https://github.com/tresko/react-datepicker/tree/master/packages/hooks). It manages the datepicker logic. You can control the selected dates using the `startDate`, `endDate`, and `onDatesChange` props as shown below.
 
 ```js
 const {
@@ -69,7 +85,7 @@ const {
 
 ### useMonth
 
-`useMonth` returns the array of `days`, `weekDayLabels` and `monthLabel`, depends on the `year` and `month` props.
+`useMonth` returns an array of `days`, `weekDayLabels` and `monthLabel`, depends on the `year` and `month` props.
 
 ```js
 const {
@@ -84,7 +100,7 @@ const {
 
 ### useDay
 
-Returns callbacks and flags, which we need for styling.
+Returns callbacks and flags used for styling.
 
 ```js
 const {
@@ -94,7 +110,7 @@ const {
     isWithinHoverRange,
     disabledDate,
     onKeyDown,
-    onClickk,
+    onClick,
     onMouseEnter,
 } = useMonth({
      date,
@@ -113,7 +129,14 @@ const {
 
 ## @datepicker-react/styled
 
-An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with [styled-components](https://www.styled-components.com/). It supports RTL and theming with [styled-system](https://github.com/styled-system/styled-system).
+This part of the library is used for styling. As mentioned above it leverages `css-in-js`. There are quite a few great libraries to choose from,
+but I decided to pick [styled-components](https://www.styled-components.com/), since it's the one I am most comfortable with.
+
+
+The result is an easily internationalizable, accessible, mobile-friendly datepicker library for the web. It supports RTL and theming with
+[styled-system](https://github.com/styled-system/styled-system).
+
+The library can be used as a single date input (`DateSingleInput`), a input range (`DateRangeInput`) or as a "classical" datepicker component (`Datepicker`)
 
 ### Install
 
@@ -172,4 +195,3 @@ function App() {
   )
 }
 ```
-
