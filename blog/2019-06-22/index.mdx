@@ -6,39 +6,35 @@ categories:
   - Datepicker
 ---
 
-Recently, I took a decision to create a
-[React datepicker](https://tresko.dev/yet-another-datepicker-in-react) to reduce a bundle size and
-also to speed up theming.
+Recently, I decided to create a
+[datepicker for React](https://tresko.dev/yet-another-datepicker-in-react). The main motivation was
+to reduce the bundle size and speed up theming.
 
 ## The problem
 
-Having a datepicker component that you can reuse is great, but it presents a few problems, least of
-which is how to change their styling to adapt to a new theme. You’ve probably come across this
-problem many times. You have a datepicker that you want to use in another project. It should work
-the same, but you want to have different color palette, which will match to the rest of website
+Having a datepicker component that you can reuse is great, but it presents a few problems. The
+biggest one is adapting your component to match the projects theme. You’ve probably come across this
+problem many times. You have a react component that you want to use in another project. It should
+work the same, but you want to have different color palette, which will match to the rest of website
 design.
+
+## Starting the solution
 
 Let’s start by thinking about how can we theme our datepicker. Maybe we can style it using external
 CSS, but in my opinion that is not the best solution. Class names might change in the future, so the
 look of the datepicker will no longer be the same.
-
-Can we find a solution?
-
-## Starting the solution
 
 There are a multitude of technologies available to style your React components using CSS. We want
 something that allows us to easily deal with things like hover states and media queries as well as
 allowing us to change our styles based on the props that we pass to our datepicker.
 
 Luckily this is exactly what [styled-components](https://www.styled-components.com/) is great for.
-But that is not the end. The [Styled System](https://styled-system.com/) take theming in
-`styled-components` even to a higher level.
 
-Styled System is one of the best libraries I have ever used. Therefore is a logical choice for
-theming the [@datepicker-react/styled](https://github.com/tresko/react-datepicker) library. 
-
-Why? Styled System enables to style consistently with a global theme, respond to changing requirements
-quickly and create mobile-first responsive layouts with ease.
+Theming with `styled-components` can be cumbersome to start. You have to define breakpoint, css
+props that you want to pass to you components, the colors etc. Luckily we have
+[styled-system](https://styled-system.com/), a library that enables us to apply a consistent style
+with a global theme, respond to changing requirements quickly and create mobile-first responsive
+layouts with ease. It is one of the best libraries I have ever used.
 
 ## Design constraints theme
 
@@ -68,11 +64,11 @@ multiple levels deep.
 ```
 
 In the example code above we apply a theme to the `ThemeProvider`. As we mentioned earlier,
-`@datepicker-react/styled` use `styled-system` for theming, which make it simpler to use values from
-a theme and apply styles responsively across breakpoints.
+`@datepicker-react/styled` uses `styled-system` for theming, which make it simpler to use values
+from a theme and apply styles responsively across breakpoints.
 
-That's why the theme object contains breakpoints key. All datepicker styles are located in
-`datepickerReact` object. If we look closely to the `daySize` key, we see that it is an array, which
+That's why the theme object contains breakpoints keys. All datepicker styles are located in
+`datepickerReact` object. If you examine the `daySize` key, we see that it is an array, which
 includes two numbers. In practice, that means that the day has the size of 36 pixels if the window
 is narrower than 32em. If the window is wider than 32em, the `daySize` size is 40 pixels.
 
