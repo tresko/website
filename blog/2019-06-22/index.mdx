@@ -1,0 +1,89 @@
+---
+date: '2019-06-22'
+title: 'Theming React datepicker (@datepicker-react/styled)'
+categories:
+  - React
+  - Datepicker
+---
+
+Recently, I decided to create a
+[datepicker for React](https://tresko.dev/yet-another-datepicker-in-react). The main motivation was
+to reduce the bundle size and speed up theming.
+
+## The problem
+
+Having a datepicker component that you can reuse is great, but it presents a few problems. The
+biggest one is adapting your component to match the projects theme. You’ve probably come across this
+problem many times. You have a react component that you want to use in another project. It should
+work the same, but you want to have different color palette, which will match to the rest of website
+design.
+
+## Starting the solution
+
+Let’s start by thinking about how can we theme our datepicker. Maybe we can style it using external
+CSS, but in my opinion that is not the best solution. Class names might change in the future, so the
+look of the datepicker will no longer be the same.
+
+There are a multitude of technologies available to style your React components using CSS. We want
+something that allows us to easily deal with things like hover states and media queries as well as
+allowing us to change our styles based on the props that we pass to our datepicker.
+
+Luckily this is exactly what [styled-components](https://www.styled-components.com/) is great for.
+
+Theming with `styled-components` can be cumbersome to start. You have to define breakpoint, css
+props that you want to pass to you components, the colors etc. Luckily we have
+[styled-system](https://styled-system.com/), a library that enables us to apply a consistent style
+with a global theme, respond to changing requirements quickly and create mobile-first responsive
+layouts with ease. It is one of the best libraries I have ever used.
+
+## Design constraints theme
+
+We define our theme as a object and then provide it using the `ThemeProvider` component. This
+component provides a theme to all React components underneath itself via the context API. In the
+render tree all styled-components will have access to the provided theme, even when they are
+multiple levels deep.
+
+```jsx harmony
+<ThemeProvider
+  theme={{
+    breakpoints: ['32em', '48em', '64em'],
+    reactDatepicker: {
+      daySize: [36, 40],
+      fontFamily: 'system-ui, -apple-system',
+      colors: {
+        accessibility: '#D80249',
+        selectedDay: '#f7518b',
+        selectedDayHover: '#F75D95',
+        primaryColor: '#d8366f',
+      },
+    },
+  }}
+>
+  <DateRangeInput {...props} />
+</ThemeProvider>
+```
+
+In the example code above we apply a theme to the `ThemeProvider`. As we mentioned earlier,
+`@datepicker-react/styled` uses `styled-system` for theming, which make it simpler to use values
+from a theme and apply styles responsively across breakpoints.
+
+That's why the theme object contains breakpoints keys. All datepicker styles are located in
+`datepickerReact` object. If you examine the `daySize` key, we see that it is an array, which
+includes two numbers. In practice, that means that the day has the size of 36 pixels if the window
+is narrower than 32em. If the window is wider than 32em, the `daySize` size is 40 pixels.
+
+That's not all, you can change the color palette with ease. You just need to provide the `colors`
+object to the `reactDatepicker` object.
+
+There are a variety of available styles.
+[Here is a full list.](https://github.com/tresko/react-datepicker/blob/master/docs/THEME_PROPS.md)
+
+<br />
+
+<iframe
+  src="https://codesandbox.io/embed/boring-field-42pdb?fontsize=14"
+  title="Theming @datepicker-react/styled"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media"
+  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
