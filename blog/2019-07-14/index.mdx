@@ -1,0 +1,477 @@
+---
+date: '2019-07-14'
+title: 'Create a custom React date picker in 10 minutes'
+categories:
+  - React
+  - Datepicker
+---
+
+![](https://cdn-images-1.medium.com/max/800/1*ZpoZfr798CEDsZ_ltR5KeA.png)
+
+<br />
+
+In this article, I'll show you the easiest way possible to create a date picker using React. We'll be using:
+* [@emotion/core](https://github.com/emotion-js/emotion),
+* [@datepicker-react/hooks](https://github.com/tresko/react-datepicker).
+
+<br />
+
+<iframe src="https://codesandbox.io/embed/create-custom-react-date-picker-in-10-minutes-0knng?fontsize=14&view=preview" title="Create custom React date picker in 10 minutes" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe><br />
+
+This will be the end result.
+
+I'm assuming that you know basic JavaScript and that you've encountered a little bit of React and hooks before. Other than that, there are no prerequisites.
+
+Let's get started!
+
+## Step 1: Install dependencies
+
+First, we need to install our dependencies. Like we mentioned before, we'll use emotion and [@datepicker-react/hooks](https://github.com/tresko/react-datepicker).
+
+```text
+yarn add @emotion/core @datepicker-react/hooks
+```
+
+## Step 2: Datepicker context
+
+We'll create a `Context` to share the date picker state and callbacks through the date picker component tree.
+
+> Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+
+<br />
+
+```js
+// datepickerContext.js
+import React from "react";
+
+export const datepickerContextDefaultValue = {
+  focusedDate: null,
+  isDateFocused: () => false,
+  isDateSelected: () => false,
+  isDateHovered: () => false,
+  isDateBlocked: () => false,
+  isFirstOrLastSelectedDate: () => false,
+  onDateFocus: () => {},
+  onDateHover: () => {},
+  onDateSelect: () => {}
+};
+
+export default React.createContext(datepickerContextDefaultValue);
+
+```
+
+
+The upper code creates a Context object, which contains default state and callbacks. When React renders a component that subscribes to this `Context` object it will read the current context value from the closest matching Provider above it in the tree. If there isn't a matching `Provider`, then the current Context will read default values.
+
+## Step 3: NavButton component
+
+In this step, we'll create a button, which will allow us to navigate through months. A `Button` component will receive two props, `children` and `onClick` callback.
+
+```jsx harmony
+// NavButton.js
+/** @jsx jsx */
+import { jsx } from "@emotion/core";
+
+export default function NavButton({ children, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      css={{
+        border: "1px solid #929598",
+        background: "transparent",
+        padding: "8px",
+        fontSize: "12px"
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+## Step 4: Datepicker component
+
+This will be our core component, which will contain our date picker logic. Date manipulation isn't the easiest job to do in a JavaScript. That's why people use libraries like 
+[moment](https://momentjs.com/), [date-fns](https://date-fns.org/) and [luxon](https://github.com/moment/luxon).
+
+Luckily, we don't have to use any of them, because we use @dapicker-react/hooks, which does all the dirty job for us. We need just to use the right hook and pass the proper arguments. 
+
+@dapicker-react/hooks has three exported hooks:
+* useDatepicker
+* useMonth
+* useDay
+
+We can understand from the name, that we will use `useDatepicker` hook in `Datepicker` component.
+
+So let's program the `Datepicker` component.
+
+### 1. Define state
+
+We need to manage the start and end date, which we can do with the `useState` hook.
+
+```jsx harmony
+// Datepicker.js
+import React, { useState } from "react";
+import { START_DATE } from "@datepicker-react/hooks";
+
+function Datepicker() {
+  const [state, setState] = useState({
+    startDate: null,
+    endDate: null,
+    focusedInput: START_DATE
+  });
+
+  return null
+}
+
+export default Datepicker;
+```
+
+We set the initial state value. We have an empty start and end date. We see that we also have `focusedInput` in the state object, 
+with which we determine or choose the start or end date.
+
+### 2. useDatepicker hook
+
+We can pass various arguments ([see all](https://github.com/tresko/react-datepicker/tree/master/packages/hooks#usedatepickerprops)) 
+to the `useDatepicker` hook, but we will pass just the required ones. `useDatepicker` return an object, which includes callbacks and 
+variables, that we need to manage the date picker. Some of them we'll pass to the `Context`, which we did in step 2.
+
+```jsx harmony
+import React, { useState } from "react";
+import { useDatepicker, START_DATE } from "@datepicker-react/hooks";
+
+function Datepicker() {
+  const [state, setState] = useState({
+    startDate: null,
+    endDate: null,
+    focusedInput: START_DATE
+  });
+  const {
+    firstDayOfWeek,
+    activeMonths,
+    isDateSelected,
+    isDateHovered,
+    isFirstOrLastSelectedDate,
+    isDateBlocked,
+    isDateFocused,
+    focusedDate,
+    onDateHover,
+    onDateSelect,
+    onDateFocus,
+    goToPreviousMonths,
+    goToNextMonths
+  } = useDatepicker({
+    startDate: state.startDate,
+    endDate: state.endDate,
+    focusedInput: state.focusedInput,
+    onDatesChange: handleDateChange
+  });
+
+  function handleDateChange(data) {
+    if (!data.focusedInput) {
+      setState({ ...data, focusedInput: START_DATE });
+    } else {
+      setState(data);
+    }
+  }
+
+  return null
+}
+
+export default Datepicker;
+```
+
+### 3. Final Datepicker component
+
+```jsx harmony
+/** @jsx jsx */
+import { useState } from "react";
+import { useDatepicker, START_DATE } from "@datepicker-react/hooks";
+import { jsx } from "@emotion/core";
+import Month from "./Month";
+import NavButton from "./NavButton";
+import DatepickerContext from "./datepickerContext";
+
+function Datepicker() {
+  const [state, setState] = useState({
+    startDate: null,
+    endDate: null,
+    focusedInput: START_DATE
+  });
+  const {
+    firstDayOfWeek,
+    activeMonths,
+    isDateSelected,
+    isDateHovered,
+    isFirstOrLastSelectedDate,
+    isDateBlocked,
+    isDateFocused,
+    focusedDate,
+    onDateHover,
+    onDateSelect,
+    onDateFocus,
+    goToPreviousMonths,
+    goToNextMonths
+  } = useDatepicker({
+    startDate: state.startDate,
+    endDate: state.endDate,
+    focusedInput: state.focusedInput,
+    onDatesChange: handleDateChange
+  });
+
+  function handleDateChange(data) {
+    if (!data.focusedInput) {
+      setState({ ...data, focusedInput: START_DATE });
+    } else {
+      setState(data);
+    }
+  }
+
+  return (
+    <DatepickerContext.Provider
+      value={{
+        focusedDate,
+        isDateFocused,
+        isDateSelected,
+        isDateHovered,
+        isDateBlocked,
+        isFirstOrLastSelectedDate,
+        onDateSelect,
+        onDateFocus,
+        onDateHover
+      }}
+    >
+      <div>
+        <strong>Focused input: </strong>
+        {state.focusedInput}
+      </div>
+      <div>
+        <strong>Start date: </strong>
+        {state.startDate && state.startDate.toLocaleString()}
+      </div>
+      <div>
+        <strong>End date: </strong>
+        {state.endDate && state.endDate.toLocaleString()}
+      </div>
+
+      <NavButton onClick={goToPreviousMonths}>Previous</NavButton>
+      <NavButton onClick={goToNextMonths}>Next</NavButton>
+
+      <div
+        css={{
+          display: "grid",
+          margin: "32px 0 0",
+          gridTemplateColumns: `repeat(${activeMonths.length}, 300px)`,
+          gridGap: "0 64px"
+        }}
+      >
+        {activeMonths.map(month => (
+          <Month
+            key={`${month.year}-${month.month}`}
+            year={month.year}
+            month={month.month}
+            firstDayOfWeek={firstDayOfWeek}
+          />
+        ))}
+      </div>
+    </DatepickerContext.Provider>
+  );
+}
+
+export default Datepicker;
+```
+
+## Step 5: Month component
+
+Probably you see that `Month` component is included into `Datepicker` component and it gets three props `year`, `month` and `firstDayOfWeek`. 
+All of these we will pass to the `useMonth` hook, which will return days of the month, week labels and month label.
+
+```jsx harmony
+/** @jsx jsx */
+import { useMonth } from "@datepicker-react/hooks";
+import { jsx } from "@emotion/core";
+import Day from "./Day";
+
+function Month({ year, month, firstDayOfWeek }) {
+  const { days, weekdayLabels, monthLabel } = useMonth({
+    year,
+    month,
+    firstDayOfWeek
+  });
+
+  return (
+    <div>
+      <div css={{ textAlign: "center", margin: "0 0 16px" }}>
+        <strong>{monthLabel}</strong>
+      </div>
+      <div
+        css={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          justifyContent: "center",
+          marginBottom: "10px",
+          fontSize: "10px"
+        }}
+      >
+        {weekdayLabels.map(dayLabel => (
+          <div css={{ textAlign: "center" }} key={dayLabel}>
+            {dayLabel}
+          </div>
+        ))}
+      </div>
+      <div
+        css={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          justifyContent: "center"
+        }}
+      >
+        {days.map((day, index) => {
+          if (typeof day === "object") {
+            return (
+              <Day
+                date={day.date}
+                key={day.date.toString()}
+                dayLabel={day.dayLabel}
+              />
+            );
+          }
+
+          return <div key={index} />;
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default Month;
+```
+
+## Step 6: Day component
+
+We are close to the finish line, we need just to do the `Day` component. 
+It will receive `date` and `dayLabel` props. We will pass date prop along with callbacks from date picker context (step 2) to the `useDay` hook.
+
+```jsx harmony
+/** @jsx jsx */
+import { useRef, useContext } from "react";
+import { useDay } from "@datepicker-react/hooks";
+import { jsx } from "@emotion/core";
+import DatepickerContext from "./datepickerContext";
+
+function getColor(
+  isSelected,
+  isSelectedStartOrEnd,
+  isWithinHoverRange,
+  isDisabled
+) {
+  return ({
+    selectedFirstOrLastColor,
+    normalColor,
+    selectedColor,
+    rangeHoverColor,
+    disabledColor
+  }) => {
+    if (isSelectedStartOrEnd) {
+      return selectedFirstOrLastColor;
+    } else if (isSelected) {
+      return selectedColor;
+    } else if (isWithinHoverRange) {
+      return rangeHoverColor;
+    } else if (isDisabled) {
+      return disabledColor;
+    } else {
+      return normalColor;
+    }
+  };
+}
+
+function Day({ dayLabel, date }) {
+  const dayRef = useRef(null);
+  const {
+    focusedDate,
+    isDateFocused,
+    isDateSelected,
+    isDateHovered,
+    isDateBlocked,
+    isFirstOrLastSelectedDate,
+    onDateSelect,
+    onDateFocus,
+    onDateHover
+  } = useContext(DatepickerContext);
+  const {
+    isSelected,
+    isSelectedStartOrEnd,
+    isWithinHoverRange,
+    disabledDate,
+    onClick,
+    onKeyDown,
+    onMouseEnter,
+    tabIndex
+  } = useDay({
+    date,
+    focusedDate,
+    isDateFocused,
+    isDateSelected,
+    isDateHovered,
+    isDateBlocked,
+    isFirstOrLastSelectedDate,
+    onDateFocus,
+    onDateSelect,
+    onDateHover,
+    dayRef
+  });
+
+  if (!dayLabel) {
+    return <div />;
+  }
+
+  const getColorFn = getColor(
+    isSelected,
+    isSelectedStartOrEnd,
+    isWithinHoverRange,
+    disabledDate
+  );
+
+  return (
+    <button
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      onMouseEnter={onMouseEnter}
+      tabIndex={tabIndex}
+      type="button"
+      ref={dayRef}
+      css={{
+        padding: "8px",
+        border: 0,
+        color: getColorFn({
+          selectedFirstOrLastColor: "#FFFFFF",
+          normalColor: "#001217",
+          selectedColor: "#FFFFFF",
+          rangeHoverColor: "#FFFFFF",
+          disabledColor: "#808285"
+        }),
+        background: getColorFn({
+          selectedFirstOrLastColor: "#00aeef",
+          normalColor: "#FFFFFF",
+          selectedColor: "#71c9ed",
+          rangeHoverColor: "#71c9ed",
+          disabledColor: "#FFFFFF"
+        })
+      }}
+    >
+      {dayLabel}
+    </button>
+  );
+}
+
+export default Day;
+```
+
+<iframe src="https://codesandbox.io/embed/create-custom-react-date-picker-in-10-minutes-0knng?fontsize=14&view=preview" title="Create custom React date picker in 10 minutes" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe><br />
+
+Congrats! You created a basic date picker component and get a basic understanding of the React context and hooks. 
+
+I demonstrate how easy is to create a date picker with @datepicker-react/hooks library. If you want to use internationalizable, 
+accessible, mobile-friendly date picker, you can use a [@datepicker-react/styled](https://github.com/tresko/react-datepicker) library.
