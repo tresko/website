@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {Link, graphql} from 'gatsby'
 import styled from 'styled-components'
 import kebabCase from 'lodash/kebabCase'
-import MDXRenderer from 'gatsby-mdx/mdx-renderer'
+import {MDXRenderer} from 'gatsby-plugin-mdx'
 
 import {Layout, Wrapper, Header, Subline, SEO, PrevNext} from '../components'
 import config from '../../config'
@@ -37,11 +37,11 @@ const Content = styled.article`
   h2 {
     margin: 3rem 0 1rem;
   }
-  
+
   h3 {
     margin: 2.2rem 0 1rem;
   }
-  
+
   p {
     margin: 1rem 0;
   }
@@ -84,7 +84,7 @@ const Post = ({pageContext: {slug, prev, next}, data: {mdx: postNode}}) => {
             ))}
           </Subline>
           <PostContent>
-            <MDXRenderer>{postNode.code.body}</MDXRenderer>
+            <MDXRenderer>{postNode.body}</MDXRenderer>
           </PostContent>
           <PrevNext prev={prev} next={next} />
         </Content>
@@ -116,9 +116,7 @@ Post.defaultProps = {
 export const postQuery = graphql`
   query postBySlug($slug: String!) {
     mdx(fields: {slug: {eq: $slug}}) {
-      code {
-        body
-      }
+      body
       excerpt
       frontmatter {
         title
