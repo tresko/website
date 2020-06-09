@@ -51,8 +51,8 @@ const IndexPage = ({
       <Hero>
         <h1>Hi.</h1>
         <p>
-          I&apos;m Miha Sedej, a Frontend Engineer with four years of industry experience,
-          specializing in developing React apps. I'm also the creator of{' '}
+          I&apos;m Miha Sedej, a Software Engineer currently working in Fintech. I'm also the
+          creator of{' '}
           <a
             href="https://github.com/tresko/react-datepicker"
             target="_blank"
