@@ -33,7 +33,7 @@
     "react-dom": "^16.14.0",
     "react-helmet": "^6.1.0",
     "react-live": "^2.3.0",
-    "styled-components": "^5.3.0",
+    "styled-components": "^5.3.1",
     "typeface-bitter": "^0.0.71",
     "typeface-open-sans": "^0.0.75"
   },
