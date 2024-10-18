@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "author": "sedej.miha@gmail.com",
   "dependencies": {
-    "@mdx-js/mdx": "^1.6.22",
-    "@mdx-js/react": "^1.6.22",
+    "@mdx-js/mdx": "^3.1.0",
+    "@mdx-js/react": "^3.1.0",
     "babel-plugin-styled-components": "^1.13.3",
     "change-case": "^4.1.2",
     "gatsby": "^2.32.13",
