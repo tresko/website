@@ -7,7 +7,7 @@
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "babel-plugin-styled-components": "^1.13.3",
-    "change-case": "^4.1.2",
+    "change-case": "^5.4.4",
     "gatsby": "^2.32.13",
     "gatsby-plugin-catch-links": "^2.10.0",
     "gatsby-plugin-google-analytics": "^2.11.0",
